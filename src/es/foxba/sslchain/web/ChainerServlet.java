@@ -27,7 +27,7 @@ public class ChainerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String certificate = req.getParameter("certificate");
 		String intermediateOnlyStr = req.getParameter("intermediateOnly");
-		boolean intermediateOnly = intermediateOnlyStr != null && intermediateOnlyStr.equals("1");
+		boolean intermediateOnly = intermediateOnlyStr != null && !intermediateOnlyStr.isEmpty();
 		String result = memoryChainer.convert(certificate, intermediateOnly);
 		resp.setHeader("Content-Type", "text/plain");
 		resp.getWriter().write(result);
