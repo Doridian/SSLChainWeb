@@ -3,6 +3,7 @@ package es.foxba.sslchain.web;
 import se.foxba.sslchain.lib.MemoryChainer;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet("/do")
+@MultipartConfig
 public class ChainerServlet extends HttpServlet {
 	private static final MemoryChainer memoryChainer;
 	static {
