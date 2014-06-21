@@ -20,7 +20,7 @@ public class ChainerServlet extends HttpServlet {
 		if(caParam != null)
 			caFile = new File(caParam);
 		else
-			caFile = new File("/etc/ssl/certs");
+			caFile = new File(new File(System.getProperty("user.home")), "sslchain_ca");
 		memoryChainer = new MemoryChainer(caFile);
 	}
 
