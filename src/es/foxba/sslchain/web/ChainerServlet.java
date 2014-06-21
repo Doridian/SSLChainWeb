@@ -7,8 +7,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.print.Printable;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 @WebServlet("/do")
 public class ChainerServlet extends HttpServlet {
@@ -25,11 +28,24 @@ public class ChainerServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String certificate = req.getParameter("certificate");
-		String intermediateOnlyStr = req.getParameter("intermediateOnly");
-		boolean intermediateOnly = intermediateOnlyStr != null && !intermediateOnlyStr.isEmpty();
-		String result = memoryChainer.convert(certificate, intermediateOnly);
-		resp.setHeader("Content-Type", "text/plain");
-		resp.getWriter().write(result);
+		final String certificate = req.getParameter("certificate");
+		final String intermediateOnlyStr = req.getParameter("intermediateOnly");
+		final boolean intermediateOnly = intermediateOnlyStr != null && !intermediateOnlyStr.isEmpty();
+
+		String result;
+		try {
+			result = memoryChainer.convert(certificate, intermediateOnly);
+		} catch (Exception e) {
+			result = null;
+		}
+
+		if(result == null || result.isEmpty()) {
+			resp.sendError(400, "Bad certificate data");
+		} else {
+			resp.setHeader("Content-Type", "text/plain");
+			PrintWriter writer = resp.getWriter();
+			writer.write(result);
+			writer.close();
+		}
 	}
 }
